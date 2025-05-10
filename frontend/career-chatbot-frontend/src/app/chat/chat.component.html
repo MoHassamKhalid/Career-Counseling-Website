@@ -1,0 +1,67 @@
+<div class="chat-container">
+    <div class="d-flex justify-content-end align-items-end">
+      <button class="btn btn-small" (click)="closeChat()" style="width: fit-content;">X</button> <!-- Close button -->
+    </div>
+  
+    <div class="chat-header">
+      <h6>🎓 Career Counsellor Bot</h6>
+      <p>Ask me anything about careers, education, and professional development!</p>
+    </div>
+    
+    <div class="chat-messages">
+      <div *ngFor="let msg of messages" [ngClass]="{'message': true, 'user-message': msg.sender === 'You', 'bot-message': msg.sender === 'Bot'}">
+        <div class="message-content">
+          <span class="sender">{{ msg.sender }}</span>
+          <p class="text">{{ msg.text }}</p>
+        </div>
+      </div>
+  
+      <div *ngIf="isLoading" class="message bot-message">
+        <div class="message-content">
+          <span class="sender"></span>
+          <p class="text">Thinking...</p>
+        </div>
+      </div>
+      
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+    </div>
+  
+    <div class="suggestions">
+      <p>Try asking one of these questions:</p>
+      <div class="suggestion-list">
+        <button *ngFor="let suggestion of suggestions" 
+                (click)="populateInput(suggestion)"
+                class="suggestion-button">
+          {{ suggestion }}
+        </button>
+      </div>
+    </div>
+  
+    <div class="chat-input">
+      <input 
+        [(ngModel)]="userInput" 
+        (keydown.enter)="sendMessage()" 
+        placeholder="Type your question here..." 
+        class="message-input"
+        [disabled]="isLoading"
+      />
+      
+      <!-- Speech-to-Text Button -->
+      <button (click)="startListening()" class="send-button mic-button" [disabled]="isRecording">
+        🎙️ {{ isRecording ? 'Listening...' : '' }}
+      </button>
+  
+      <!-- Send Message Button -->
+      <button 
+        (click)="sendMessage()" 
+        class="send-button"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? 'Sending...' : 'Send' }}
+      </button>
+    </div>
+  </div>
+  
+  
